@@ -21,14 +21,25 @@ namespace Uno_Shuffle
                 throw new ArgumentException("Only Plus4 or Pick suits can be Color Nigro");
         }
 
+        public bool CanBePlaceOn(Card secondCard)
+        {
+            if(this.Color == Color.Nigro)
+            {
+                return true;
+            }else if(this.Color == secondCard.Color)
+            {
+                return true;
+            }else if(this.Suit == secondCard.Suit)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override string ToString()
         {
             return Color + ": " + Suit;
-        }
-
-        public static implicit operator Card(List<Card> v)
-        {
-            throw new NotImplementedException();
         }
     }
 
