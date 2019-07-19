@@ -23,7 +23,7 @@ namespace Uno_Shuffle
 
         public bool CanBePlaceOn(Card secondCard)
         {
-            if(this.Color == Color.Nigro)
+            if(this.Color == Color.Nigro || secondCard.Color == this.Color)
             {
                 return true;
             }else if(this.Color == secondCard.Color)
