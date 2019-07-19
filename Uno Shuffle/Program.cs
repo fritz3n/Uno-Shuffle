@@ -6,7 +6,21 @@ namespace Uno_Shuffle
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var cards = Simulator.GetDeck();
+
+            foreach(Card card in cards)
+            {
+                Console.WriteLine(card);
+            }
+
+            cards = Simulator.GetRandomDeck();
+
+            foreach (Card card in cards)
+            {
+                Console.WriteLine(card);
+            }
+
+            Console.ReadLine();
         }
     }
 }

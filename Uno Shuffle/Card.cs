@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Uno_Shuffle
 {
-    struct Card
+    class Card
     {
         public Suit Suit { get; private set; }
         public Color Color { get; private set; }
@@ -17,8 +17,18 @@ namespace Uno_Shuffle
             if ((suit == Suit.Plus4 || suit == Suit.Pick) && color != Color.Nigro)
                 throw new ArgumentException("Plus4 or Pick suits need to be Color Nigro");
 
-            if ((suit != Suit.Plus4 || suit != Suit.Pick) && color == Color.Nigro)
+            if (!(suit != Suit.Plus4 || suit != Suit.Pick) && color == Color.Nigro)
                 throw new ArgumentException("Only Plus4 or Pick suits can be Color Nigro");
+        }
+
+        public override string ToString()
+        {
+            return Color + ": " + Suit;
+        }
+
+        public static implicit operator Card(List<Card> v)
+        {
+            throw new NotImplementedException();
         }
     }
 
