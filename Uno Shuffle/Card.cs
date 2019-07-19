@@ -20,6 +20,22 @@ namespace Uno_Shuffle
             if ((suit != Suit.Plus4 || suit != Suit.Pick) && color == Color.Nigro)
                 throw new ArgumentException("Only Plus4 or Pick suits can be Color Nigro");
         }
+
+        public bool CanBePlaceOn(Card secondCard)
+        {
+            if(this.Color == Color.Nigro)
+            {
+                return true;
+            }else if(this.Color == secondCard.Color)
+            {
+                return true;
+            }else if(this.Suit == secondCard.Suit)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 
     public enum Suit
