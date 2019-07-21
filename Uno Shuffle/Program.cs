@@ -20,7 +20,7 @@ namespace Uno_Shuffle
             }
 
 
-            var cards = Simulator.GetRandomDeck();
+            var cards = Game.GetRandomDeck();
 
             foreach (Card card in cards)
             {
@@ -29,7 +29,7 @@ namespace Uno_Shuffle
 
             Console.WriteLine("----");
 
-            Game game = new OneCardDistributor().Distribute(4);
+            Game game = new CardDistributor().Distribute(4);
 
             game.Simulate();
 

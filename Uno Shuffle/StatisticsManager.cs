@@ -20,13 +20,15 @@ namespace Uno_Shuffle
             Interations = interations;
             Distributor = distributor;
             Players = players;
+
+            Decks = new ConcurrentDictionary<int, Card[]>();
         }
 
         public void GenerateDecks()
         {
             Parallel.For(0, this.Interations, (i) => 
             {
-                this.Decks.TryAdd(i, this.Distributor.Distribute(this.Players).Simulate());
+                //this.Decks.TryAdd(i, this.Distributor.Distribute(this.Players).Simulate());
             });
         }
 

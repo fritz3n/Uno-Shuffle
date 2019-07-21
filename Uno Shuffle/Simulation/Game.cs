@@ -69,6 +69,7 @@ namespace Uno_Shuffle
 
         public void Simulate()
         {
+            //TODO: Add Plus2 Accumulation -- probably will be hacky
             try
             {
                 Card currentCard = Deck.Pop();
