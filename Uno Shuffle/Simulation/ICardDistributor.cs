@@ -2,7 +2,7 @@
 
 namespace Uno_Shuffle
 {
-    interface ICardDistributor
+    public interface ICardDistributor
     {
         Game Distribute(int players, Card[] cards = null);
     }

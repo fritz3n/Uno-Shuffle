@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Uno_Shuffle
 {
-    class Card
+    public class Card
     {
         public Suit Suit { get; private set; }
         public Color Color { get; set; }
@@ -44,6 +44,36 @@ namespace Uno_Shuffle
         public override string ToString()
         {
             return Color + ": " + Suit;
+        }
+
+        public void WriteToConsole()
+        {
+            //Set the colors to the cards color
+            switch (this.Color)
+            {
+                case Color.Yellow:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+                case Color.Green:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case Color.Red:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                case Color.Blue:
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    break;
+                case Color.Nigro:
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.White;
+                    break;
+                default:
+                    throw new NotImplementedException(this.Color.ToString());
+            }
+            Console.WriteLine(Suit.ToString());
+            //Reset the colors
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 

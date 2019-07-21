@@ -7,14 +7,20 @@ namespace Uno_Shuffle
     {
         static void Main(string[] args)
         {
-            var cards = Game.GetDeck();
+            
+            StatisticsManager manager = new StatisticsManager(1, new CardDistributor(), 4);
+            manager.GenerateDecks();
 
-            foreach(Card card in cards)
-            {
-                Console.WriteLine(card);
+            foreach (var deck in manager.Decks) {
+                Console.WriteLine();
+                foreach (Card card in deck.Value)
+                {
+                    card.WriteToConsole();
+                }
             }
 
-            cards = Game.GetRandomDeck();
+
+            var cards = Simulator.GetRandomDeck();
 
             foreach (Card card in cards)
             {

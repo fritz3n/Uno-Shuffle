@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Uno_Shuffle
 {
-    class Game
+    public class Game
     {
         public Stack<Card> Deck { get; private set; }
         public List<Card> Discard { get; private set; }
