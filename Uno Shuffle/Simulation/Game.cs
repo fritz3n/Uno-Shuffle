@@ -67,9 +67,127 @@ namespace Uno_Shuffle
             return shuffled;
         }
 
-        public static void Simulate()
+        public void Simulate()
         {
+            try
+            {
+                Card currentCard = Deck.Pop();
 
+                int turnPlayer = 0;
+                int direction = 1;
+
+                void AdvancePlayer(int modifier = 1)
+                {
+                    turnPlayer += direction * modifier;
+
+                    // I don´t wanna do bounds checking everytime i modify player! just do it here
+                    turnPlayer = turnPlayer % Players;
+                    if (turnPlayer < 0)
+                        turnPlayer = 0;
+                }
+
+                Card GetFittingCard()
+                {
+                    Card specialOption = null;
+
+                    foreach (var card in Hands[turnPlayer])
+                    {
+                        if (card.Color == Color.Nigro)
+                        {
+                            specialOption = card;
+                            continue;
+                        }
+
+                        if (card.CanBePlaceOn(currentCard))
+                            return Hands[turnPlayer].Pop(card);
+                    }
+
+                    return specialOption == null ? null : Hands[turnPlayer].Pop(specialOption);
+                }
+
+                bool LayFittingCard()
+                {
+                    Card card;
+
+                    if ((card = GetFittingCard()) != null)
+                    {
+                        Discard.Add(currentCard);
+                        currentCard = card;
+
+                        switch (card.Suit)
+                        {
+                            case Suit.Skip:
+                                AdvancePlayer(2);
+                                break;
+
+                            case Suit.Reverse:
+                                direction *= -1;
+                                AdvancePlayer();
+                                break;
+
+                            case Suit.Plus2:
+                                AdvancePlayer();
+
+                                Hands[turnPlayer].Add(Deck.Pop());
+                                Hands[turnPlayer].Add(Deck.Pop());
+
+                                AdvancePlayer();
+                                break;
+
+                            case Suit.Plus4:
+                                AdvancePlayer();
+
+                                Hands[turnPlayer].Add(Deck.Pop());
+                                Hands[turnPlayer].Add(Deck.Pop());
+                                Hands[turnPlayer].Add(Deck.Pop());
+                                Hands[turnPlayer].Add(Deck.Pop());
+
+                                AdvancePlayer();
+                                break;
+
+                            case Suit.Pick:
+                                // Find out which color is the most in the players hand and set the picking card to that
+                                currentCard.Color = Hands[turnPlayer].Where(c => c.Color != Color.Nigro).GroupBy(c => c.Color).Aggregate((g1, g2) => g1.Count() > g2.Count() ? g1 : g2).First().Color;
+                                break;
+
+                            default:
+                                AdvancePlayer();
+                                break;
+                        }
+
+                        return true;
+                    }
+
+                    return false;
+                }
+
+
+                while (Deck.Count > 0)
+                {
+
+
+                    if (Hands[turnPlayer].Count == 0)
+                    {
+                        turnPlayer++;
+                        continue;
+                    }
+
+
+
+                    if (LayFittingCard())
+                        continue;
+
+                    Hands[turnPlayer].Add(Deck.Pop());
+
+                    if (!LayFittingCard())
+                        AdvancePlayer();
+
+                    if (Hands.Sum(h => h.Count) == 0)
+                        return;
+                }
+            }
+            catch (InvalidOperationException) { }
         }
+
     }
 }

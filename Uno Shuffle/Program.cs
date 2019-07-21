@@ -1,4 +1,5 @@
 ﻿using System;
+using Uno_Shuffle.Simulation;
 
 namespace Uno_Shuffle
 {
@@ -6,20 +7,30 @@ namespace Uno_Shuffle
     {
         static void Main(string[] args)
         {
-            var cards = Simulator.GetDeck();
+            var cards = Game.GetDeck();
 
             foreach(Card card in cards)
             {
                 Console.WriteLine(card);
             }
 
-            cards = Simulator.GetRandomDeck();
+            cards = Game.GetRandomDeck();
 
             foreach (Card card in cards)
             {
                 Console.WriteLine(card);
             }
 
+            Console.WriteLine("----");
+
+            Game game = new OneCardDistributor().Distribute(4);
+
+            game.Simulate();
+
+            foreach (Card card in game.Discard)
+            {
+                Console.WriteLine(card);
+            }
             Console.ReadLine();
         }
     }

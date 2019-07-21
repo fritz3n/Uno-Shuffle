@@ -7,7 +7,7 @@ namespace Uno_Shuffle
     class Card
     {
         public Suit Suit { get; private set; }
-        public Color Color { get; private set; }
+        public Color Color { get; set; }
 
         public Card(Suit suit, Color color)
         {
@@ -23,13 +23,17 @@ namespace Uno_Shuffle
 
         public bool CanBePlaceOn(Card secondCard)
         {
-            if(this.Color == Color.Nigro || secondCard.Color == this.Color)
+            if((this.Color == Color.Nigro || secondCard.Color == this.Color) && this.Suit != Suit.Pick && secondCard.Suit != Suit.Pick)
             {
                 return true;
-            }else if(this.Color == secondCard.Color)
+            }
+
+            if (this.Color == secondCard.Color)
             {
                 return true;
-            }else if(this.Suit == secondCard.Suit)
+            }
+
+            if (this.Suit == secondCard.Suit)
             {
                 return true;
             }
