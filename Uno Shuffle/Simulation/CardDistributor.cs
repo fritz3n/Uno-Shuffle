@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Uno_Shuffle.Simulation
 {
-    class CardDistributor : ICardDistributor
+    public class CardDistributor : ICardDistributor
     {
         public int CardsPerGive { get; private set; }
         public CardDistributor(int cardsPerPlayer = 7, int cardsPerGive = 1)
@@ -33,7 +33,7 @@ namespace Uno_Shuffle.Simulation
             while(playersWithFullHands < players)
             {
                 int cardsToBeGiven = CardsPerGive;
-                while (cardsToBeGiven <= 0 && hands[currPlayer].Count != CardsPerPlayer) //maybe off by one
+                while (cardsToBeGiven >= 0 && hands[currPlayer].Count != CardsPerPlayer) //maybe off by one
                 {
                     hands[currPlayer].Add(deck.Pop());
                     cardsToBeGiven--;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Uno_Shuffle
 {
-    class Game
+    public class Game
     {
         public Stack<Card> Deck { get; private set; }
         public List<Card> Discard { get; private set; }
@@ -67,9 +67,9 @@ namespace Uno_Shuffle
             return shuffled;
         }
 
-        public static void Simulate()
+        public Card[] Simulate()
         {
-
+            throw new NotImplementedException();
         }
     }
 }
