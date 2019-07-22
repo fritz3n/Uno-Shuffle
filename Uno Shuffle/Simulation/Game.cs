@@ -13,6 +13,8 @@ namespace Uno_Shuffle
 
         public int Players { get; private set; }
 
+        public const int NumberOfCardsPerGame = 108;
+
         public Game(int players, Stack<Card> deck, List<Card>[] hands)
         {
             Players = players;
@@ -26,7 +28,7 @@ namespace Uno_Shuffle
 
         public static Card[] GetDeck()
         {// Creates an ordered deck to the specifications of https://exceptionnotfound.net/modeling-practice-uno-in-c-sharp-part-one-rules-assumptions-cards/
-            Card[] cards = new Card[108];
+            Card[] cards = new Card[NumberOfCardsPerGame];
 
             for (int color = 1; color < 5; color++)
             {
@@ -70,9 +72,10 @@ namespace Uno_Shuffle
         public void Simulate()
         {
             //TODO: Add Plus2 Accumulation -- probably will be hacky
+            Card currentCard = null;
             try
             {
-                Card currentCard = Deck.Pop();
+                currentCard = Deck.Pop();
 
                 int turnPlayer = 0;
                 int direction = 1;
@@ -81,7 +84,7 @@ namespace Uno_Shuffle
                 {
                     turnPlayer += direction * modifier;
 
-                    // I don´t wanna do bounds checking everytime i modify player! just do it here
+                    // I don´t wanna do bounds checking every time i modify player! just do it here
                     turnPlayer = turnPlayer % Players;
                     if (turnPlayer < 0)
                         turnPlayer = 0;
@@ -169,7 +172,19 @@ namespace Uno_Shuffle
 
                     if (Hands[turnPlayer].Count == 0)
                     {
-                        turnPlayer++;
+                        turnPlayer = (turnPlayer + 1) % Players; //wrap around so we don't get issues when the last player has no cards left.
+
+                        //Check if all players are out of cards
+                        bool allEmpty = true;
+                        foreach(List<Card> hand in Hands)
+                            {
+                            if (hand.Count != 0)
+                            {
+                                allEmpty = false;
+                                break;
+                            }
+                        }
+                        if (allEmpty) { break; }
                         continue;
                     }
 
@@ -184,11 +199,40 @@ namespace Uno_Shuffle
                         AdvancePlayer();
 
                     if (Hands.Sum(h => h.Count) == 0)
-                        return;
+                        break;
                 }
             }
             catch (InvalidOperationException) { }
+            Discard.Add(currentCard);
         }
 
+        public Card[] GetState()
+        {
+            int i = 0;
+            Card[] cards = new Card[NumberOfCardsPerGame];
+            foreach(Card card in Discard)
+            {
+                cards[i] = card;
+                i++;
+            }
+            foreach (List<Card> playerHand in Hands)
+            {
+                foreach(Card card in playerHand)
+                {
+                    cards[i] = card;
+                    i++;
+                }
+            }
+
+            //Add the Deck in reversed order
+            int j = 1;
+            while (Deck.Count != 0)
+            {
+                cards[NumberOfCardsPerGame - j] = Deck.Pop();
+                j++;
+            }
+
+            return cards;
+        }
     }
 }

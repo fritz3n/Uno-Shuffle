@@ -26,9 +26,12 @@ namespace Uno_Shuffle
 
         public void GenerateDecks()
         {
+            var lockDummy = "123";
             Parallel.For(0, this.Interations, (i) => 
             {
-                //this.Decks.TryAdd(i, this.Distributor.Distribute(this.Players).Simulate());
+                Game g = this.Distributor.Distribute(this.Players);
+                g.Simulate();
+                this.Decks.TryAdd(i, g.GetState());
             });
         }
 

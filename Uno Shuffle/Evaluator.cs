@@ -31,7 +31,6 @@ namespace Uno_Shuffle
 
     public struct EvaluationResult
     {
-        
         public float averageDistanceBetweenLayableCards;
     }
 }
