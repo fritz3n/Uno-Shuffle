@@ -18,5 +18,12 @@ namespace Uno_Shuffle
             list.Remove(item);
             return item;
         }
+
+        public static T? Pop<T>(this List<T> list, T? item)  where T : struct
+        {
+            if(item != null)
+                list.Remove(item.Value);
+            return item;
+        }
     }
 }

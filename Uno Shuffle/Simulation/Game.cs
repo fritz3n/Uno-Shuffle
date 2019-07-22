@@ -72,10 +72,11 @@ namespace Uno_Shuffle
         public void Simulate()
         {
             //TODO: Add Plus2 Accumulation -- probably will be hacky
-            Card currentCard = null;
+            Card currentCard;
+
+            currentCard = Deck.Pop();
             try
             {
-                currentCard = Deck.Pop();
 
                 int turnPlayer = 0;
                 int direction = 1;
@@ -90,9 +91,9 @@ namespace Uno_Shuffle
                         turnPlayer = 0;
                 }
 
-                Card GetFittingCard()
+                Card? GetFittingCard()
                 {
-                    Card specialOption = null;
+                    Card? specialOption = null;
 
                     foreach (var card in Hands[turnPlayer])
                     {
@@ -106,18 +107,16 @@ namespace Uno_Shuffle
                             return Hands[turnPlayer].Pop(card);
                     }
 
-                    return specialOption == null ? null : Hands[turnPlayer].Pop(specialOption);
+                    return specialOption == null ? null : (Card?)Hands[turnPlayer].Pop(specialOption);
                 }
 
                 bool LayFittingCard()
                 {
-                    Card card;
+                    Card? possibleCard;
 
-                    if ((card = GetFittingCard()) != null)
+                    if ((possibleCard = GetFittingCard()) != null)
                     {
-                        Discard.Add(currentCard);
-                        currentCard = card;
-
+                        Card card = possibleCard.Value;
                         switch (card.Suit)
                         {
                             case Suit.Skip:
@@ -130,12 +129,30 @@ namespace Uno_Shuffle
                                 break;
 
                             case Suit.Plus2:
-                                AdvancePlayer();
 
-                                Hands[turnPlayer].Add(Deck.Pop());
-                                Hands[turnPlayer].Add(Deck.Pop());
+                                int cards = 2;
 
                                 AdvancePlayer();
+
+                                while (true)
+                                {
+                                    // Ceck if the player has a plus2 card and lay it onto the discard pile
+                                    if (Hands[turnPlayer].Exists(c => c.Suit == Suit.Plus2))
+                                    {
+                                        Discard.Add(Hands[turnPlayer].Pop(Hands[turnPlayer].Where(c => c.Suit == Suit.Plus2).First()));
+                                    }
+                                    else // the player cant block; take cards
+                                    {
+                                        for (int i = 0; i < cards; i++)
+                                        {
+                                            Hands[turnPlayer].Add(Deck.Pop());
+                                        }
+                                        AdvancePlayer();
+                                        break;
+                                    }
+
+                                    AdvancePlayer();
+                                }
                                 break;
 
                             case Suit.Plus4:
@@ -158,6 +175,9 @@ namespace Uno_Shuffle
                                 AdvancePlayer();
                                 break;
                         }
+
+                        Discard.Add(currentCard);
+                        currentCard = card;
 
                         return true;
                     }

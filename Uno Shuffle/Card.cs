@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Uno_Shuffle
 {
-    public class Card
+    public struct Card
     {
         public Suit Suit { get; private set; }
         public Color Color { get; set; }
@@ -23,17 +23,17 @@ namespace Uno_Shuffle
 
         public bool CanBePlaceOn(Card secondCard)
         {
-            if((this.Color == Color.Nigro || secondCard.Color == this.Color) && this.Suit != Suit.Pick && secondCard.Suit != Suit.Pick)
-            {
-                return true;
-            }
-
             if (this.Color == secondCard.Color)
             {
                 return true;
             }
 
             if (this.Suit == secondCard.Suit)
+            {
+                return true;
+            }
+
+            if (this.Color == Color.Nigro || secondCard.Color == Color.Nigro)
             {
                 return true;
             }
